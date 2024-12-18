@@ -25,21 +25,6 @@
     $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all'; // Default to 'all' if no filter is selected
     $users = showUsers($filter);
 
-
-    // function to remove user
-    function removeUser($idUser){
-        include '../connection.php';
-        $removeUser = $conn->prepare("DELETE FROM utilisateurs WHERE id_utilisateur=?");
-        $removeUser->execute([$idUser]);
-    }
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_id'])) {
-        $idUser = $_POST['remove_id'];
-        removeUser($idUser);
-        // Redirect to avoid form resubmission after page reload
-        header("Location: users.php");
-        exit();
-    }
 ?>
 
 
