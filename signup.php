@@ -13,7 +13,6 @@
     <?php
         require_once('connection.php');
 
-        function signUp(){
             if ($_SERVER["REQUEST_METHOD"] == "POST"){
                 if (isset($_POST['signup'])) {
                     $full_name = $_POST['full_name'];
@@ -33,7 +32,7 @@
                         $_SESSION['user_loged_in_id'] = $conn->lastInsertId();
         
                         if ($result && $role == 1) {
-                            header('Location: Admin/home.php');
+                            header('Location: Admin/dashboard.php');
                         } else if ($result && $role == 2) {
                             header('Location: Client/home.php');
                         } else if ($result && $role == 3) {
@@ -46,7 +45,6 @@
                     }
                 }
             }
-        }
     ?>
 
 <div class="min-w-screen min-h-screen bg-gray-900 flex items-center justify-center px-5 py-5">
