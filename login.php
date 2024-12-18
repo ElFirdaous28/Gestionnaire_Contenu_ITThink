@@ -33,7 +33,7 @@
                         $_SESSION['user_loged_in_id'] = $user["id_utilisateur"];
         
                         if ($user && $role == 1) {
-                            header('Location: Admin/home.php');
+                            header('Location: Admin/dashboard.php');
                         } else if ($user && $role == 2) {
                             header('Location: Client/home.php');
                         } else if ($user && $role == 3) {
