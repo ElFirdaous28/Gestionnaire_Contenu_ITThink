@@ -1,3 +1,48 @@
+<?php
+    function showUsers($condition){
+        include '../connection.php';
+        switch ($condition){
+            case 'all':
+                $resul = $conn->prepare("SELECT * FROM utilisateurs WHERE role != 1");
+                break;
+            case 'clients':
+                $resul = $conn->prepare("SELECT * FROM utilisateurs WHERE role = 2");
+                break;
+            case 'freelancers':
+                $resul = $conn->prepare("SELECT * FROM utilisateurs WHERE role = 3");
+                break;
+            default:
+                $resul = $conn->prepare("SELECT * FROM utilisateurs WHERE role != 1");
+                break;
+        }
+        $resul->execute();
+        
+        $users = $resul->fetchAll(PDO::FETCH_ASSOC);
+        return $users;
+    }
+
+    // take the filter value
+    $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all'; // Default to 'all' if no filter is selected
+    $users = showUsers($filter);
+
+
+    // function to remove user
+    function removeUser($idUser){
+        include '../connection.php';
+        $removeUser = $conn->prepare("DELETE FROM utilisateurs WHERE id_utilisateur=?");
+        $removeUser->execute([$idUser]);
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_id'])) {
+        $idUser = $_POST['remove_id'];
+        removeUser($idUser);
+        // Redirect to avoid form resubmission after page reload
+        header("Location: users.php");
+        exit();
+    }
+?>
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -80,7 +125,18 @@
             <?php include '../includes/header.php';?>
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
                 <div class="container px-6 py-8 mx-auto">
+                    <div class="flex justify-between">
                     <h3 class="text-3xl font-medium text-gray-700">Users</h3>
+
+                    <form method="GET">
+                        <select name="filter" id="" class="rounded-lg px-2" onchange="this.form.submit()">
+                            <option value="all" <?= isset($_GET['filter']) && $_GET['filter'] == 'all' ? 'selected' : '' ?>>ALL</option>
+                            <option value="clients" <?= isset($_GET['filter']) && $_GET['filter'] == 'clients' ? 'selected' : '' ?>>Clients</option>
+                            <option value="freelancers" <?= isset($_GET['filter']) && $_GET['filter'] == 'freelancers' ? 'selected' : '' ?>>Freelancers</option>
+                        </select>
+                    </form>
+
+                    </div>
     
                     <div class="flex flex-col mt-8">
                         <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -106,42 +162,45 @@
                                     </thead>
     
                                     <tbody class="bg-white">
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                <div class="flex items-center">
-                                                    <div class="flex-shrink-0 w-10 h-10">
-                                                        <img class="w-10 h-10 rounded-full"
-                                                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                                            alt="">
-                                                    </div>
-    
-                                                    <div class="ml-4">
-                                                        <div class="text-sm font-medium leading-5 text-gray-900">John Doe
+                                        <!-- users -->
+                                        <?php foreach ($users as $user): ?>
+                                            <tr>
+                                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                    <div class="flex items-center">
+                                                        <div class="flex-shrink-0 w-10 h-10 bg-gray-500 text-gray-100 text-2xl rounded-full flex justify-center items-center uppercase">
+                                                            <?= htmlspecialchars($user['nom_utilisateur'])[0] ?>
                                                         </div>
-                                                        <div class="text-sm leading-5 text-gray-500">john@example.com</div>
+        
+                                                        <div class="ml-4">
+                                                            <div class="text-sm font-medium leading-5 text-gray-900"><?= htmlspecialchars($user['nom_utilisateur']); ?></div>
+                                                            <div class="text-sm leading-5 text-gray-500"><?= htmlspecialchars($user['email']); ?>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-    
-                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                <div class="text-sm leading-5 text-gray-900">Software Engineer</div>
-                                                <div class="text-sm leading-5 text-gray-500">Web dev</div>
-                                            </td>
-    
-                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                <span
-                                                    class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">Active</span>
-                                            </td>
-    
-                                            <td
-                                                class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                                                Owner</td>
-    
-                                            <td
-                                                class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
-                                                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                            </td>
-                                        </tr>
+                                                </td>
+        
+                                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                    <div class="text-sm leading-5 text-gray-900 w-full"><?= $user['title'] !== null ? htmlspecialchars($user['title']) : ''; ?></div>
+                                                </td>
+        
+                                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                                    <span
+                                                        class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full"><?= $user['is_active']==1?"Active": "blocked"?></span>
+                                                </td>
+        
+                                                <td class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
+                                                    <?= $user['role']== 2 ? "client":"Freelancer"; ?>
+                                                </td>
+        
+                                                <td class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
+                                                    <!-- Remove User Form with Confirmation -->
+                                                    <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove this user?');">
+                                                        <input type="hidden" name="remove_id" value="<?= $user['id_utilisateur']; ?>">
+                                                        <button type="submit" class="text-indigo-600 hover:text-indigo-900">Remove</button>
+                                                    </form>
+                                                </td>
+
+                                            </tr>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -154,4 +213,7 @@
 </div>
 <script data-cfasync="false" src="https://www.creative-tim.com/twcomponents/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"8e2ed63ffe793144","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2024.10.5","token":"1b7cbb72744b40c580f8633c6b62637e"}' crossorigin="anonymous"></script>
 </body>
+
+<script>
+</script>
 </html>
