@@ -1,29 +1,34 @@
 <?php
-    function showUsers($condition){
+    function showUsers($filter, $userToSearch ='') {
         include '../connection.php';
-        switch ($condition){
-            case 'all':
-                $resul = $conn->prepare("SELECT * FROM utilisateurs WHERE role != 1");
-                break;
-            case 'clients':
-                $resul = $conn->prepare("SELECT * FROM utilisateurs WHERE role = 2");
-                break;
-            case 'freelancers':
-                $resul = $conn->prepare("SELECT * FROM utilisateurs WHERE role = 3");
-                break;
-            default:
-                $resul = $conn->prepare("SELECT * FROM utilisateurs WHERE role != 1");
-                break;
-        }
-        $resul->execute();
+        $query = "SELECT * FROM utilisateurs WHERE role != 1"; // by default we show all users except admins
         
+        // add filter to query
+        if ($filter == 'clients') {
+            $query .= " AND role = 2";
+        } elseif ($filter == 'freelancers') {
+            $query .= " AND role = 3";
+        }
+        
+        // add search condition to query
+        if ($userToSearch) {
+            $query .= " AND nom_utilisateur LIKE ?";
+        }
+        
+        $resul = $conn->prepare($query);
+        $resul->execute($userToSearch ? ["%$userToSearch%"] : []);
+        
+        // Fetch and return results
         $users = $resul->fetchAll(PDO::FETCH_ASSOC);
         return $users;
     }
 
-    // take the filter value
+    // Get filter and search values from GET
     $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all'; // Default to 'all' if no filter is selected
-    $users = showUsers($filter);
+    $userToSearch = isset($_GET['userToSearch']) ? $_GET['userToSearch'] : ''; // Default to empty if no search term is provided
+
+    // Call showUsers with both filter and search term
+    $users = showUsers($filter, $userToSearch);
 
 
     // function to remove user
@@ -33,7 +38,7 @@
         $removeUser->execute([$idUser]);
     }
     
-    // chech the post request to remove the user
+    // check the post request to remove the user
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_user'])) {
         $idUser = $_POST['remove_user'];
         removeUser($idUser);
@@ -54,7 +59,7 @@
         $changeStatus = $conn->prepare("UPDATE utilisateurs SET is_active=? WHERE id_utilisateur=?");
         $changeStatus->execute([$currentStatus==0?1:0,$idUser]);
     }
-    // chech the post request to block the user
+    // check the post request to block the user
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['block_user_id'])) {
         $idUser = $_POST['block_user_id'];
         changeStatus($idUser);
@@ -150,15 +155,27 @@
                     <div class="flex justify-between">
                     <h3 class="text-3xl font-medium text-gray-700">Users</h3>
 
+                    <!-- Search input -->
                     <form method="GET">
-                        <select name="filter" id="" class="rounded-lg px-2" onchange="this.form.submit()">
+                        <div class="relative mx-4 lg:mx-0">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                <svg class="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none">
+                                    <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </span>
+                            <input type="text" name="userToSearch" onchange="this.form.submit()" class="w-32 pl-10 py-1 pr-4 rounded-md form-input sm:w-64 focus:border-indigo-600 focus:outline-none" placeholder="Search" value="<?= isset($_GET['userToSearch']) ? htmlspecialchars($_GET['userToSearch']) : '' ?>">
+                        </div>
+                    </form>
+
+                    <!-- Filter select -->
+                    <form method="GET">
+                        <select name="filter" class="rounded-lg px-2 py-1 focus:outline-none" onchange="this.form.submit()">
                             <option value="all" <?= isset($_GET['filter']) && $_GET['filter'] == 'all' ? 'selected' : '' ?>>ALL</option>
                             <option value="clients" <?= isset($_GET['filter']) && $_GET['filter'] == 'clients' ? 'selected' : '' ?>>Clients</option>
                             <option value="freelancers" <?= isset($_GET['filter']) && $_GET['filter'] == 'freelancers' ? 'selected' : '' ?>>Freelancers</option>
                         </select>
                     </form>
-
-                    </div>
+                </div>
     
                     <div class="flex flex-col mt-8">
                         <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -214,7 +231,7 @@
                                                 </td>
         
                                                 <td class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                                                    <?= $user['role']== 2 ? "client":"Freelancer"; ?>
+                                                    <?= $user['role']== 2 ? "Client":"Freelancer"; ?>
                                                 </td>
         
                                                 <td class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
