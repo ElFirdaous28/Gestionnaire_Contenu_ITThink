@@ -1,5 +1,6 @@
 <?php
-    function showUsers($filter, $userToSearch ='') {
+        function showUsers($filter, $userToSearch ='') {
+
         include '../connection.php';
         $query = "SELECT * FROM utilisateurs WHERE role != 1"; // by default we show all users except admins
         
