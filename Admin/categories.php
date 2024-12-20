@@ -1,10 +1,6 @@
 <?php
-// Enable error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Include database connection
-require_once "../connection.php";
+    include '../includes/check_loged_in.php';
+    require_once "../connection.php";
 
     // add or modify category code
     if ($_SERVER["REQUEST_METHOD"] == "POST") {

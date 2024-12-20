@@ -30,6 +30,7 @@
     
                         session_start();
                         $_SESSION['user_loged_in_id'] = $conn->lastInsertId();
+                        $_SESSION['user_loged_in_role'] = $role;
         
                         if ($result && $role == 1) {
                             header('Location: Admin/dashboard.php');

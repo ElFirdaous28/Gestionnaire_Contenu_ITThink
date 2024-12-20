@@ -31,6 +31,7 @@
 
                         session_start();
                         $_SESSION['user_loged_in_id'] = $user["id_utilisateur"];
+                        $_SESSION['user_loged_in_role'] = $role;
         
                         if ($user && $role == 1) {
                             header('Location: Admin/dashboard.php');
