@@ -83,7 +83,7 @@
                             style="display: none;">
                             <a href="#"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 cursor-pointer">Profile</a>
-                            <form action="../login.php" method="POST">
+                            <form action="../logout.php" method="POST">
                                 <input type="submit" class="block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 cursor-pointer" value="Logout" name="logout">
                             </form>
                         </div>
