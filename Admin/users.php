@@ -1,4 +1,5 @@
 <?php
+    include '../includes/check_loged_in.php';
         function showUsers($filter, $userToSearch ='') {
 
         include '../connection.php';

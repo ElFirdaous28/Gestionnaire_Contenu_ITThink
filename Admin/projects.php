@@ -1,3 +1,4 @@
+<?php include '../includes/check_loged_in.php';?>
 <!doctype html>
 <html lang="en">
 <head>
