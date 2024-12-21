@@ -35,9 +35,9 @@
                         if ($result && $role == 1) {
                             header('Location: Admin/dashboard.php');
                         } else if ($result && $role == 2) {
-                            header('Location: Client/home.php');
+                            header('Location: Client/dashboard.php');
                         } else if ($result && $role == 3) {
-                            header('Location: Freelancer/home.php');
+                            header('Location: Freelancer/dashboard.php');
                         }                    
                         
                         exit;
