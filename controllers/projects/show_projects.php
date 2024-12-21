@@ -1,9 +1,8 @@
 <?php
-    include '../includes/check_loged_in.php';
-    function showProjects($filter, $userToSearch ='') {
-        $user_logein_id=$_SESSION['user_loged_in_id'];
-
-        include '../connection.php';
+    include '../connection.php';
+    function showProjects($conn,$filter_by_cat, $filter_by_sub_cat, $projectToSearch = '') {
+        $user_loged_in_id = $_SESSION['user_loged_in_id']; // Corrected typo
+    
         $query = "SELECT p.id_projet, p.titre_projet, p.description,
                          p.id_categorie, p.id_sous_categorie, p.id_utilisateur,
                          p.project_status, c.nom_categorie AS nom_categorie,
@@ -11,51 +10,62 @@
                   FROM projets p
                   JOIN categories c ON c.id_categorie = p.id_categorie
                   JOIN sous_categories sc ON sc.id_sous_categorie = p.id_sous_categorie
-                  WHERE id_utilisateur=$user_logein_id";
+                  WHERE p.id_utilisateur = :user_id"; // Use a named parameter for user ID
         
-        // // add filter to query
-        // if ($filter == 'clients') {
-        //     $query .= " AND role = 2";
-        // } elseif ($filter == 'freelancers') {
-        //     $query .= " AND role = 3";
-        // }
-        
-        // // add search condition to query
-        // if ($userToSearch) {
-        //     $query .= " AND nom_utilisateur LIKE ?";
-        // }
-        
-        $resul = $conn->prepare($query);
-        $resul->execute($userToSearch ? ["%$userToSearch%"] : []);
-        
+        // Parameters array for prepared statement
+        $params = ['user_id' => $user_loged_in_id];
+    
+        // Add filter by category if not 'all'
+        if ($filter_by_cat !== 'all') {
+            $query .= " AND c.nom_categorie = :filter_by_cat";
+            $params['filter_by_cat'] = $filter_by_cat;
+        }
+    
+        // Add filter by subcategory if not 'all'
+        if ($filter_by_sub_cat !== 'all') {
+            $query .= " AND sc.nom_sous_categorie = :filter_by_sub_cat";
+            $params['filter_by_sub_cat'] = $filter_by_sub_cat;
+        }
+    
+        // Add search condition if a search term is provided
+        if ($projectToSearch) {
+            $query .= " AND p.titre_projet LIKE :search_term";
+            $params['search_term'] = "%$projectToSearch%";
+        }
+    
+        // Prepare and execute the query
+        $stmt = $conn->prepare($query);
+        $stmt->execute($params);
+    
         // Fetch and return results
-        $projects = $resul->fetchAll(PDO::FETCH_ASSOC);
+        $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $projects;
     }
-
-    // Get filter and search values from GET
-    $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all'; // Default to 'all' if no filter is selected
-    $userToSearch = isset($_GET['userToSearch']) ? $_GET['userToSearch'] : ''; // Default to empty if no search term is provided
-
-    // Call showProjects with both filter and search term
-    $projects = showProjects($filter, $userToSearch);
-
-
-    // // function to remove user
-    // function removeUser($idUser){
-    //     include '../connection.php';
-    //     $removeUser = $conn->prepare("DELETE FROM utilisateurs WHERE id_utilisateur=?");
-    //     $removeUser->execute([$idUser]);
-    // }
     
-    // // check the post request to remove the user
-    // if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_user'])) {
-    //     $idUser = $_POST['remove_user'];
-    //     removeUser($idUser);
-    //     // Redirect to avoid form resubmission after page reload
-    //     header("Location: users.php");
-    //     exit();
-    // }
+    // Get filter and search values from GET
+    $filter_by_cat = isset($_GET['filter_by_cat']) ? $_GET['filter_by_cat'] : 'all';
+    $filter_by_sub_cat = isset($_GET['filter_by_sub_cat']) ? $_GET['filter_by_sub_cat'] : 'all';
+    $projectToSearch = isset($_GET['projectToSearch']) ? $_GET['projectToSearch'] : '';
+    
+    // Call showProjects with both filters and the search term
+    $projects = showProjects($conn,$filter_by_cat, $filter_by_sub_cat, $projectToSearch);
+    
+
+
+    // function to remove project
+    function removeProject($idProject,$conn){
+        $removeProject = $conn->prepare("DELETE FROM projets WHERE id_projet=?");
+        $removeProject->execute([$idProject]);
+    }
+    
+    // check the post request to remove the user
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_project'])) {
+        $idUser = $_POST['id_projet'];
+        removeProject($idUser,$conn);
+        // Redirect to avoid form resubmission after page reload
+        header("Location: project.php");
+        exit();
+    }
 
     // // function to block user
     // function changeStatus($idUser){
