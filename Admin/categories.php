@@ -340,6 +340,14 @@
         
     }
     });
+    function showModal(){
+        modal.classList.remove('hidden');
+    }
+    function closeModal(){
+        modal.classList.add('hidden');
+        document.getElementById('category_form').classList.add("hidden");
+        document.getElementById('sub_category_form').classList.add("hidden");
+    }
 
     // show modal as add subcategory
     const addSubCategoryButtons =document.querySelectorAll(".add_sub_cat");
@@ -363,14 +371,7 @@
     }
     });
 
-    function showModal(){
-        modal.classList.remove('hidden');
-    }
-    function closeModal(){
-        modal.classList.add('hidden');
-        document.getElementById('category_form').classList.add("hidden");
-        document.getElementById('sub_category_form').classList.add("hidden");
-    }
+    
 
     
 </script>
