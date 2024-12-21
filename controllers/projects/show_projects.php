@@ -49,42 +49,4 @@
     
     // Call showProjects with both filters and the search term
     $projects = showProjects($conn,$filter_by_cat, $filter_by_sub_cat, $projectToSearch);
-    
-
-
-    // function to remove project
-    function removeProject($idProject,$conn){
-        $removeProject = $conn->prepare("DELETE FROM projets WHERE id_projet=?");
-        $removeProject->execute([$idProject]);
-    }
-    
-    // check the post request to remove the user
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['remove_project'])) {
-        $idUser = $_POST['id_projet'];
-        removeProject($idUser,$conn);
-        // Redirect to avoid form resubmission after page reload
-        header("Location: project.php");
-        exit();
-    }
-
-    // // function to block user
-    // function changeStatus($idUser){
-    //     include '../connection.php';
-
-    //     // get the old status
-    //     $stmt = $conn->prepare("SELECT is_active FROM utilisateurs WHERE id_utilisateur = ?");
-    //     $stmt->execute([$idUser]);
-    //     $currentStatus = $stmt->fetchColumn();
-
-    //     $changeStatus = $conn->prepare("UPDATE utilisateurs SET is_active=? WHERE id_utilisateur=?");
-    //     $changeStatus->execute([$currentStatus==0?1:0,$idUser]);
-    // }
-    // // check the post request to block the user
-    // if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['block_user_id'])) {
-    //     $idUser = $_POST['block_user_id'];
-    //     changeStatus($idUser);
-    //     // Redirect to avoid form resubmission after page reload
-    //     header("Location: users.php");
-    //     exit();
-    // }
 ?>
