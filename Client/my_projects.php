@@ -139,29 +139,30 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                         <div class="flex items-center">
-                                            <div class="text-sm font-medium leading-5 text-gray-900"><?= htmlspecialchars($project['titre_projet']); ?></div>
+                                            <div class="project_title text-sm font-medium leading-5 text-gray-900"><?= htmlspecialchars($project['titre_projet']); ?></div>
                                         </div>
                                     </td>
 
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                        <div class="text-sm leading-5 text-gray-900 w-full"><?= $project['description'] !== null ? htmlspecialchars($project['description']) : ''; ?></div>
+                                        <div class="project_description text-sm leading-5 text-gray-900 w-full"><?= $project['description'] !== null ? htmlspecialchars($project['description']) : ''; ?></div>
                                     </td>
 
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                        <div class="text-sm leading-5 text-gray-900 w-full"><?= $project['nom_categorie'] !== null ? htmlspecialchars($project['nom_categorie']) : ''; ?></div>
+                                        <div class="project_category text-sm leading-5 text-gray-900 w-full" data-category-id="<?=$project['id_categorie']?>"><?= $project['nom_categorie'] !== null ? htmlspecialchars($project['nom_categorie']) : ''; ?></div>
                                     </td>
 
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                        <div class="text-sm leading-5 text-gray-900 w-full"><?= $project['nom_sous_categorie'] !== null ? htmlspecialchars($project['nom_sous_categorie']) : ''; ?></div>
+                                        <div class="project_sub_category text-sm leading-5 text-gray-900 w-full" data-sous-category-id="<?=$project['id_sous_categorie']?>">
+                                            <?= $project['nom_sous_categorie'] !== null ? htmlspecialchars($project['nom_sous_categorie']) : ''; ?></div>
                                     </td>
 
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                        <div class="text-sm leading-5 text-gray-900 w-full"><?= $project['project_status']==1?"Pending":($project['project_status']==2?"In Progress":"Completed ") ?></div>
+                                        <div class="project_status text-sm leading-5 text-gray-900 w-full"><?= $project['project_status']==1?"Pending":($project['project_status']==2?"In Progress":"Completed ") ?></div>
                                     </td>
 
                                     <td class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200 flex justify-evenly">
                                         <!-- modify button -->
-                                        <button class="modify_project_button text-indigo-600 hover:text-indigo-900">Modify</button>
+                                        <button data-project-id="<?= htmlspecialchars($project['id_projet']); ?>" class="modify_project_button text-indigo-600 hover:text-indigo-900">Modify</button>
                                         <!-- Remove User Form with Confirmation -->
                                         <form method="POST" class="mb-0" onsubmit="return confirm('Are you sure you want to remove this project?');">
                                             <input type="hidden" name="id_projet" value="<?= $project['id_projet']; ?>">
@@ -228,8 +229,18 @@
                 </select>
             </div>
 
+            <!-- status select -->
+            <div id="status_select" class="hidden flex w-full mb-4">
+                <label for="project_subcategory_input" class="text-gray-900 font-semibold w-1/3">Status:</label>
+                <select name="project_subcategory_input" id="project_subcategory_input" class="w-2/3 border-gray-300 rounded-md" required>
+                    <option value="1">Pending</option>
+                    <option value="2">In Progress</option>
+                    <option value="3">Completed</option>
+                </select>
+            </div>
+
             <!-- id category in case of inpur -->
-            <input type="text" class="" name="project_id_input" value="0" id="project_id_input">
+            <input type="text" class="hidden" name="project_id_input" value="0" id="project_id_input">
 
             <div class="flex justify-end">
                 <input type="submit" name="save_project" class="text-gray-100 bg-gray-700 border-2 border-gray-700 hover:bg-gray-900 px-8 py-1 mt-6 rounded-sm" value="Save">
@@ -255,6 +266,13 @@
     modifyProjectButtons.forEach(modifyProjectButton => {
         modifyProjectButton.onclick = () => {
             showModal();
+            document.getElementById("project_title_input").value=modifyProjectButton.closest("tr").querySelector(".project_title").textContent;            
+            document.getElementById("project_description_input").value=modifyProjectButton.closest("tr").querySelector(".project_description").textContent;            
+            document.getElementById("project_category_input").value=modifyProjectButton.closest("tr").querySelector(".project_category").getAttribute("data-category-id");            
+            document.getElementById("project_subcategory_input").value=modifyProjectButton.closest("tr").querySelector(".project_sub_category").getAttribute("data-sous-category-id");            
+            document.getElementById("project_id_input").value=modifyProjectButton.getAttribute("data-project-id");
+            console.log(modifyProjectButton.getAttribute("data-project-id"));
+            document.getElementById("status_select").classList.remove("hidden");
         }
     });
 
@@ -264,6 +282,8 @@
 
     function closeModal() {
         modal.classList.add('hidden');
+        document.getElementById("status_select").classList.add("hidden");
+        document.getElementById('project_form').reset();
     }
     window.onclick = (event) => {
         if (event.target === modal) {
