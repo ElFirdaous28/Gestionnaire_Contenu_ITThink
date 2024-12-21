@@ -16,8 +16,6 @@
         ) {
             echo "You cannot access this page!";
             die();
-        } else {
-            echo "This is your page, mannnn!";
         }
     }
 ?>
