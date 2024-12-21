@@ -1,6 +1,8 @@
 
 <?php include '../includes/check_loged_in.php';?>
 <?php include '../controllers/projects/show_projects.php';?>
+<?php include '../controllers/categories/show_categories.php';?>
+<?php include '../controllers/subcategories/show_sub_categories.php';?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -81,15 +83,51 @@
             <?php include '../includes/header.php';?>
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
                 <div class="container px-6 py-8 mx-auto">
-                    <h3 class="text-3xl font-medium text-gray-700 mb-4">My Projects</h3>
-                    <table class="min-w-full">
+                    <div class="flex justify-between items-end mb-10">
+                        <h3 class="text-3xl font-medium text-gray-700">My Projects</h3>
+                        <form method="GET">
+                            <div class="relative mx-4 lg:mx-0">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                                    <svg class="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none">
+                                        <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </span>
+                                <input type="text" name="projectToSearch" onchange="this.form.submit()" class="w-32 pl-10 py-1 pr-4 rounded-md form-input sm:w-64 focus:border-indigo-600 focus:outline-none" placeholder="Search" value="<?= isset($_GET['projectToSearch']) ? htmlspecialchars($_GET['projectToSearch']) : '' ?>">
+                            </div>
+                        </form>
+                        <!-- filter by category -->
+                        <form method="GET">
+                            <select name="filter_by_cat" class="rounded-lg px-2 py-1 focus:outline-none" onchange="this.form.submit()">
+                                <option value="all" <?= isset($_GET['filter_by_cat']) && $_GET['filter_by_cat'] == 'all' ? 'selected' : '' ?>>All Categories</option>
+                                <?php foreach ($categories as $categorie): ?>
+                                    <option value="<?= htmlspecialchars($categorie['nom_categorie']); ?>" 
+                                        <?= isset($_GET['filter_by_cat']) && $_GET['filter_by_cat'] == $categorie['nom_categorie'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($categorie['nom_categorie']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </form>
+                        <!-- filter by subcategory -->
+                        <form method="GET">
+                            <select name="filter_by_sub_cat" class="rounded-lg px-2 py-1 focus:outline-none" onchange="this.form.submit()">
+                                <option value="all" <?= isset($_GET['filter_by_sub_cat']) && $_GET['filter_by_sub_cat'] == 'all' ? 'selected' : '' ?>>All Subcategories</option>
+                                <?php foreach ($subcategories as $subcategorie): ?>
+                                    <option value="<?= htmlspecialchars($subcategorie['nom_sous_categorie']); ?>" 
+                                        <?= isset($_GET['filter_by_sub_cat']) && $_GET['filter_by_sub_cat'] == $subcategorie['nom_sous_categorie'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($subcategorie['nom_sous_categorie']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </form>
+                    </div>
+                    <table class="min-w-full text-left">
                         <thead>
                             <tr>
-                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Title</th>
-                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Description</th>
-                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Category</th>
-                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">SubCategory</th>
-                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Status</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Title</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Description</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Category</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50">SubCategory</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Status</th>
                                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                             </tr>
                         </thead>
@@ -99,9 +137,7 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                         <div class="flex items-center">
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium leading-5 text-gray-900"><?= htmlspecialchars($project['titre_projet']); ?></div>
-                                            </div>
+                                            <div class="text-sm font-medium leading-5 text-gray-900"><?= htmlspecialchars($project['titre_projet']); ?></div>
                                         </div>
                                     </td>
 
@@ -123,9 +159,9 @@
 
                                     <td class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
                                         <!-- Remove User Form with Confirmation -->
-                                        <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove this user?');">
-                                            <input type="hidden" name="remove_user" value="<?= $user['id_utilisateur']; ?>">
-                                            <button type="submit" class="text-indigo-600 hover:text-indigo-900">Remove</button>
+                                        <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove this project?');">
+                                            <input type="hidden" name="id_projet" value="<?= $project['id_projet']; ?>">
+                                            <button type="submit" name="remove_project" class="text-indigo-600 hover:text-indigo-900">Remove</button>
                                         </form>
                                     </td>
                                 </tr>
