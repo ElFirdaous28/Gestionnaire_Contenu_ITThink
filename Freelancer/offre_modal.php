@@ -31,39 +31,39 @@
     </div>
 </div>
 
-
 <script>
     const offerModal = document.getElementById('offer_modal');
     const closeOfferModal = document.getElementById('close_offer_modal');
-    // show modal as add offre
-    const submitOffreButtons = document.querySelectorAll('.submit_offre_button');
 
+    // Show modal as add offer
+    const submitOffreButtons = document.querySelectorAll('.submit_offre_button');
     submitOffreButtons.forEach(submitOffreButton => {
         submitOffreButton.addEventListener('click', () => {
             offerModal.classList.remove('hidden');
-            document.getElementById("project_id_input").value=submitOffreButton.getAttribute("data-project-id");
+            document.getElementById("project_id_input").value = submitOffreButton.getAttribute("data-project-id");
         });
     });
 
-    // show modal as modify offre
+    // Show modal as modify offer
     const modifyOffreButtons = document.querySelectorAll('.modify_offre_button');
-
-    modifyOffreButtons.forEach(modifyOffreButton => {        
+    modifyOffreButtons.forEach(modifyOffreButton => {
         modifyOffreButton.addEventListener('click', () => {
             offerModal.classList.remove('hidden');
-            document.getElementById("montant_input").value=modifyOffreButton.closest("tr").querySelector(".offre_montant").textContent;            
-            document.getElementById("delai_input").value=modifyOffreButton.closest("tr").querySelector(".offre_deali").textContent;
-            document.getElementById("offre_id_input").value=modifyOffreButton.getAttribute("data-offre-id");
+            document.getElementById("montant_input").value = modifyOffreButton.closest("tr").querySelector(".offre_montant").textContent;
+            document.getElementById("delai_input").value = modifyOffreButton.closest("tr").querySelector(".offre_deali").textContent;
+            document.getElementById("offre_id_input").value = modifyOffreButton.getAttribute("data-offre-id");
         });
     });
 
-    function showModal() {
-        modal.classList.remove('hidden');
-    }
+    // Close modal when clicking on the close button
+    closeOfferModal.addEventListener('click', () => {
+        offerModal.classList.add('hidden');
+    });
 
-    function closeModal() {
-        modal.classList.add('hidden');
-        document.getElementById("status_select").classList.add("hidden");
-        document.getElementById('project_form').reset();
-    }
+    // Close modal when clicking outside the modal content
+    window.addEventListener('click', (event) => {
+        if (event.target === offerModal) {
+            offerModal.classList.add('hidden');
+        }
+    });
 </script>
