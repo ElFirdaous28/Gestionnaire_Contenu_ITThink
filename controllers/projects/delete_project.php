@@ -11,7 +11,12 @@
         $idUser = $_POST['id_projet'];
         removeProject($idUser,$conn);
         // Redirect to avoid form resubmission after page reload
-        header("Location: my_projects.php");
+        if (strstr($_SERVER['REQUEST_URI'], "Client")) {
+            header("Location: my_projects.php");
+        }
+        else if (strstr($_SERVER['REQUEST_URI'], "Client")){
+            header("Location: projects.php");
+        }
         exit();
     }
 ?>
