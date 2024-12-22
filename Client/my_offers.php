@@ -1,5 +1,6 @@
 
 <?php include '../includes/check_loged_in.php';?>
+<?php include '../controllers/offres/client_offers.php';?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -80,78 +81,67 @@
             <?php include '../includes/header.php';?>
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
                 <div class="container px-6 py-8 mx-auto">
-                    <h3 class="text-3xl font-medium text-gray-700">Dashboard</h3>
-                    <h3>this is the clinet dashboard</h3>
-                    <!-- <div class="flex flex-col mt-8">
-                        <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-                            <div
-                                class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg">
-                                <table class="min-w-full">
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-                                                Name</th>
-                                            <th
-                                                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-                                                Title</th>
-                                            <th
-                                                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-                                                Status</th>
-                                            <th
-                                                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-                                                Role</th>
-                                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
-                                        </tr>
-                                    </thead>
-    
-                                    <tbody class="bg-white">
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                <div class="flex items-center">
-                                                    <div class="flex-shrink-0 w-10 h-10">
-                                                        <img class="w-10 h-10 rounded-full"
-                                                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                                            alt="">
-                                                    </div>
-    
-                                                    <div class="ml-4">
-                                                        <div class="text-sm font-medium leading-5 text-gray-900">John Doe
-                                                        </div>
-                                                        <div class="text-sm leading-5 text-gray-500">john@example.com</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-    
-                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                <div class="text-sm leading-5 text-gray-900">Software Engineer</div>
-                                                <div class="text-sm leading-5 text-gray-500">Web dev</div>
-                                            </td>
-    
-                                            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                <span
-                                                    class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">Active</span>
-                                            </td>
-    
-                                            <td
-                                                class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                                                Owner</td>
-    
-                                            <td
-                                                class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
-                                                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div> -->
+                    <h3 class="text-3xl font-medium text-gray-700 mb-10">My Offres</h3>
+                    <table class="min-w-full text-left">
+                        <thead>
+                            <tr>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Title</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Amount</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Deadline</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Status</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            <!-- projects -->
+                            <?php foreach ($client_offers as $client_offer): ?>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="flex items-center">
+                                            <div class="text-sm font-medium leading-5 text-gray-900"><?= htmlspecialchars($client_offer['titre_projet']); ?></div>
+                                        </div>
+                                    </td>
+
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="offre_montant text-sm leading-5 text-gray-900 w-full"><?=htmlspecialchars($client_offer['montant']);?></div>
+                                    </td>
+
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="offre_deali text-sm leading-5 text-gray-900 w-full"><?= htmlspecialchars($client_offer['delai']); ?></div>
+                                    </td>
+
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="text-sm leading-5 text-gray-900 w-full"><?= $client_offer['status']==1?"Pending":($client_offer['status']==2?"Accepted":"Rejected") ?></div>
+                                    </td>
+
+                                    <td class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200 flex justify-evenly">
+                                        <!-- accept offre -->
+                                        <?php if($client_offer['status']!=2){?>
+                                        <form method="POST" action="../controllers/offres/accepte_offre.php" class="mb-0" onsubmit="return confirm('Are you sure you want to accept this offre?');">
+                                            <input type="hidden" name="id_offre" value="<?= $client_offer['id_offre']; ?>">
+                                            <button type="submit" name="accept_offre" class="text-indigo-600 hover:text-indigo-900">Accept</button>
+                                        </form>
+                                        <?php }?>
+
+                                        <!-- add testimonila button -->
+                                        <?php if($client_offer['status']==2 && !in_array($client_offer['id_offre'], $id_offre_having_testimonial)){?>
+                                            <button data-offre-id="<?= htmlspecialchars($client_offer['id_offre']); ?>" class="add_testimonial_button text-indigo-600 hover:text-indigo-900">Add Testimonial</button>
+                                        <?php }?>
+
+                                    </td>
+
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>              
                 </div>
             </main>
         </div>
     </div>
 </div>
+
+<?php include 'testimonial_form.php';?>
+
 <script data-cfasync="false" src="https://www.creative-tim.com/twcomponents/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"8e2ed63ffe793144","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2024.10.5","token":"1b7cbb72744b40c580f8633c6b62637e"}' crossorigin="anonymous"></script>
 </body>
 </html>
