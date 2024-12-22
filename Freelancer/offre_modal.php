@@ -20,9 +20,9 @@
                 <input type="datetime-local" name="delai_input" id="delai_input" value="" class="w-2/3 border-gray-300 rounded-md" required>
             </div>
 
-            <input type="text" class="" name="project_id_input" value="0" id="project_id_input">
+            <input type="text" class="hidden" name="project_id_input" value="0" id="project_id_input">
             <!-- offre input in case of modify -->
-            <input type="text" class="" name="offre_id_input" value="0" id="offre_id_input">
+            <input type="text" class="hidden" name="offre_id_input" value="0" id="offre_id_input">
 
             <div class="flex justify-end">
                 <input type="submit" name="add_offre" class="text-gray-100 bg-gray-700 border-2 border-gray-700 hover:bg-gray-900 px-8 py-1 mt-6 rounded-sm" value="Add Offre">
