@@ -1,6 +1,6 @@
 
 <?php include '../includes/check_loged_in.php';?>
-<?php include '../controllers/testimonials/freelancer_testimonials.php';?>
+<?php include '../controllers/testimonials/client_testimonials.php';?>
 <!doctype html>
 <html lang="en">
 <head>

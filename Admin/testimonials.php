@@ -1,5 +1,5 @@
 <?php include '../includes/check_loged_in.php';?>
-<?php include '../controllers/testimonials/Admin_testimonials.php';?>
+<?php include '../controllers/testimonials/client_testimonials.php';?>
 
 <!doctype html>
 <html lang="en">
