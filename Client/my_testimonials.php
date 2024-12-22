@@ -1,5 +1,6 @@
 
 <?php include '../includes/check_loged_in.php';?>
+<?php include '../controllers/testimonials/client_testimonials.php';?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -80,61 +81,50 @@
             <?php include '../includes/header.php';?>
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
                 <div class="container px-6 py-8 mx-auto">
-                    <h3 class="text-3xl font-medium text-gray-700">My Testimonials</h3>
+                    <h3 class="text-3xl font-medium text-gray-700 mb-10">My Testimonials</h3>
                     <table class="min-w-full">
                         <thead>
                             <tr>
-                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Name</th>
-                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Title</th>
-                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"> Status</th>
-                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50"> Role</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Project Title</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Comment</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Amount</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Deadline</th>
                                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
                             </tr>
                         </thead>
                         <tbody class="bg-white">
-                                        <!-- users -->
-                                        <?php foreach ($users as $user): ?>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                    <div class="flex items-center">
-                                                        <div class="flex-shrink-0 w-10 h-10 bg-gray-500 text-gray-100 text-2xl rounded-full flex justify-center items-center uppercase">
-                                                            <?= htmlspecialchars($user['nom_utilisateur'])[0] ?>
-                                                        </div>
+                            <?php foreach ($clientTestimonials as $clientTestimonial): ?>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="flex items-center">
+                                            <div class="text-sm leading-5 text-gray-500"><?= htmlspecialchars($clientTestimonial['titre_projet']); ?>
+                                        </div>
+                                    </td>
         
-                                                        <div class="ml-4">
-                                                            <div class="text-sm font-medium leading-5 text-gray-900"><?= htmlspecialchars($user['nom_utilisateur']); ?></div>
-                                                            <div class="text-sm leading-5 text-gray-500"><?= htmlspecialchars($user['email']); ?>
-                                                        </div>
-                                                    </div>
-                                                </td>
-        
-                                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                    <div class="text-sm leading-5 text-gray-900 w-full"><?= $user['title'] !== null ? htmlspecialchars($user['title']) : ''; ?></div>
-                                                </td>
-        
-                                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                    <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to change the status of this user?');">
-                                                        <input type="hidden" name="block_user_id" value="<?= $user['id_utilisateur']; ?>">
-                                                            <button type="submit" class="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
-                                                                <?= $user['is_active']==1?"Active": "blocked"?>
-                                                            </button>
-                                                    </form>
-                                                </td>
-        
-                                                <td class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                                                    <?= $user['role']== 2 ? "Client":"Freelancer"; ?>
-                                                </td>
-        
-                                                <td class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
-                                                    <!-- Remove User Form with Confirmation -->
-                                                    <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to remove this user?');">
-                                                        <input type="hidden" name="remove_user" value="<?= $user['id_utilisateur']; ?>">
-                                                        <button type="submit" class="text-indigo-600 hover:text-indigo-900">Remove</button>
-                                                    </form>
-                                                </td>
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="testimonial_comment text-sm leading-5 text-gray-900 w-full"><?= htmlspecialchars($clientTestimonial['commentaire']); ?></div>
+                                    </td>
 
-                                            </tr>
-                                        <?php endforeach; ?>
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="text-sm leading-5 text-gray-900 w-full"><?= htmlspecialchars($clientTestimonial['montant']); ?></div>
+                                    </td>
+        
+                                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="text-sm leading-5 text-gray-900 w-full"><?= htmlspecialchars($clientTestimonial['delai']); ?></div>
+                                    </td>
+        
+                                    <td class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200 flex justify-evenly">
+                                        <!-- modify button -->
+                                        <button data-testimonial-id="<?= htmlspecialchars($clientTestimonial['id_temoignage']); ?>" data-offre-id="<?= htmlspecialchars($clientTestimonial['id_offre']); ?>" class="modify_testimonial_button text-indigo-600 hover:text-indigo-900">Modify</button>
+                                        <!-- Remove User Form with Confirmation -->
+                                        <form method="POST" action="../controllers/testimonials/delete_testimonial.php" class="mb-0" onsubmit="return confirm('Are you sure you want to remove this Testimonial?');">
+                                            <input type="hidden" name="id_temoignage" value="<?= $clientTestimonial['id_temoignage']; ?>">
+                                            <button type="submit" name="remove_testimonial" class="text-indigo-600 hover:text-indigo-900">Remove</button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -142,6 +132,9 @@
         </div>
     </div>
 </div>
+
+<?php include 'testimonial_form.php';?>
+
 <script data-cfasync="false" src="https://www.creative-tim.com/twcomponents/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"8e2ed63ffe793144","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2024.10.5","token":"1b7cbb72744b40c580f8633c6b62637e"}' crossorigin="anonymous"></script>
 </body>
 </html>
