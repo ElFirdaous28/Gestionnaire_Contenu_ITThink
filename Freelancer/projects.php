@@ -1,6 +1,7 @@
 
 <?php include '../includes/check_loged_in.php';?>
 <?php include '../controllers/projects/show_projects.php';?>
+<?php include '../controllers/projects/projects_applyed_for_by_freelnacer.php';?>
 
 <?php include '../controllers/categories/show_categories.php';?>
 <?php include '../controllers/subcategories/show_sub_categories.php';?>
@@ -138,6 +139,7 @@
                                 <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Category</th>
                                 <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50">SubCategory</th>
                                 <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50">Status</th>
+                                <th class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-gray-500 uppercase border-b border-gray-200 bg-gray-50"></th>
                             </tr>
                         </thead>
                         <tbody class="bg-white">
@@ -167,6 +169,15 @@
                                         <div class="project_status text-sm leading-5 text-gray-900 w-full"><?= $project['project_status']==1?"Pending":($project['project_status']==2?"In Progress":"Completed ") ?></div>
                                     </td>
 
+                                    <!-- post offre -->
+                                    <td class="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200 flex justify-evenly">
+                                        <?php if (in_array($project['id_projet'], $appliedProjects)): ?>
+                                            <span class="text-gray-500">Offer Submitted</span> <!-- If applied, show this message -->
+                                        <?php else: ?>
+                                            <button data-project-id="<?= htmlspecialchars($project['id_projet']); ?>" class="submit_offre_button text-indigo-600 hover:text-indigo-900">Submit Offer</button>
+                                        <?php endif; ?>                                    
+                                    </td>
+
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -176,6 +187,9 @@
         </div>
     </div>
 </div>
+
+<?php include 'offre_modal.php';?>
+
 <script data-cfasync="false" src="https://www.creative-tim.com/twcomponents/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"8e2ed63ffe793144","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2024.10.5","token":"1b7cbb72744b40c580f8633c6b62637e"}' crossorigin="anonymous"></script>
 </body>
 </html>
