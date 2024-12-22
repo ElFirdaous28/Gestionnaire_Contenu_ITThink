@@ -1,5 +1,3 @@
 <?php
-$currentPath = $_SERVER['REQUEST_URI'];
-echo $currentPath;
-die();
+echo "<script>alert('hi')</script>";
 ?>
