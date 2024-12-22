@@ -86,13 +86,7 @@
         </div>
         <div class="flex flex-col flex-1 overflow-hidden">
             <?php include '../includes/header.php';?>
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
-                <div class="container px-6 py-8 mx-auto">
-                    <h3 class="text-3xl font-medium text-gray-700">Dashboard</h3>
-                    <h3>this is the admin dashboard</h3>
-                    
-                </div>
-            </main>
+            <?php include '../includes/dashboard_main.php';?>
         </div>
     </div>
 </div>
