@@ -280,7 +280,6 @@
             document.getElementById("project_category_input").value=modifyProjectButton.closest("tr").querySelector(".project_category").getAttribute("data-category-id");            
             document.getElementById("project_subcategory_input").value=modifyProjectButton.closest("tr").querySelector(".project_sub_category").getAttribute("data-sous-category-id");            
             document.getElementById("project_id_input").value=modifyProjectButton.getAttribute("data-project-id");
-            console.log(modifyProjectButton.getAttribute("data-project-id"));
             document.getElementById("status_select").classList.remove("hidden");
         }
     });
