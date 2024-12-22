@@ -22,6 +22,19 @@
                             ':user_id' => $user_id,
                             ':project_id' => $project_id
                         ]);
+
+                            //UPDATE table_name
+                            // SET column1 = value1, column2 = value2, ...
+                            // WHERE condition;
+
+                        // save id offre as accepted_id_offre in projets table
+                        $saveAcceptedOffreId = $conn->prepare("UPDATE projets
+                                                                SET accepted_offre_id=:offre_id
+                                                                WHERE id_projet=:project_id");
+                        $saveAcceptedOffreId->execute([
+                            ':offre_id' => $conn->lastInsertId(),
+                            ':project_id' => $project_id
+                        ]);
                         echo "Offer added successfully!";
                         header("Location: ../../Freelancer/projects.php");
                     } catch (PDOException $e) {
