@@ -189,7 +189,6 @@
                         </tbody>
                     </table>
                 </div>
-                <button id="add_project_button" class="text-gray-100 bg-gray-900 hover:bg-gray-700 p-3 mb-5 mr-5 rounded-sm float-right">Add Project</button>
             </main>
         </div>
     </div>
