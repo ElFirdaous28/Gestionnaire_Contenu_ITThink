@@ -240,8 +240,8 @@
 
             <!-- status select -->
             <div id="status_select" class="hidden flex w-full mb-4">
-                <label for="project_subcategory_input" class="text-gray-900 font-semibold w-1/3">Status:</label>
-                <select name="project_subcategory_input" id="project_subcategory_input" class="w-2/3 border-gray-300 rounded-md" required>
+                <label for="project_status_input" class="text-gray-900 font-semibold w-1/3">Status:</label>
+                <select name="project_status_input" id="project_status_input" class="w-2/3 border-gray-300 rounded-md" required>
                     <option value="1">Pending</option>
                     <option value="2">In Progress</option>
                     <option value="3">Completed</option>

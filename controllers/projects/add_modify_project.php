@@ -5,11 +5,13 @@
     // Add or modify project code
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST["save_project"])) {
+
             $project_title = trim($_POST["project_title_input"]);
             $project_description = trim($_POST["project_description_input"]);
-            $project_category = isset($_POST["project_category_input"]) ? trim($_POST["project_category_input"]) : '';
-            $project_subcategory = isset($_POST["project_subcategory_input"]) ? trim($_POST["project_subcategory_input"]) : '';
+            $project_category = $_POST["project_category_input"];
+            $project_subcategory = $_POST["project_subcategory_input"];
             $project_id = isset($_POST["project_id_input"]) ? trim($_POST["project_id_input"]) : 0;
+            $project_status=(int)$_POST["project_status_input"];
 
             // Check if required fields are not empty
             if (!empty($project_title) && !empty($project_description) && !empty($project_category) && !empty($project_subcategory)) {
@@ -34,13 +36,14 @@
                 // Modify existing project if ID is provided
                 else {
                     try {
-                        $modifyProjectQuery = $conn->prepare("UPDATE projets SET titre_projet = ?, description = ?, id_categorie = ?, id_sous_categorie = ? 
+                        $modifyProjectQuery = $conn->prepare("UPDATE projets SET titre_projet = ?, description = ?, id_categorie = ?, id_sous_categorie = ?,project_status=?
                                                             WHERE id_projet = ?");
                         $modifyProjectQuery->execute([
                             $project_title, 
                             $project_description, 
                             $project_category, 
-                            $project_subcategory, 
+                            $project_subcategory,
+                            $project_status,
                             $project_id
                         ]);
                         echo "Project updated successfully!";
